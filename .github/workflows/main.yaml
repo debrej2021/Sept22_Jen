@@ -1,18 +1,69 @@
 name: Deploy to EC2 machine
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+
+push:
+
+branches:
+
+- main
+
+pull_request:
+
+branches:
+
+- main
 
 jobs:
-  build: #user defined
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout the code base
-        uses: actions/checkout@v4
-        
+build:
+
+runs-on: ubuntu-latest
+
+steps:
+
+- name: Checkout the code base
+
+uses: actions/checkout@v4
+
+- name: SSH into EC2 and Prepare Target Directory
+
+uses: appleboy/ssh-action@v1.0.0
+
+with:
+
+host: ${{ secrets.EC2_HOSTNAME }}
+
+username: ${{ secrets.EC2_USERNAME }}
+
+key: ${{ secrets.EC2_SSHKEY }}
+
+port: 22
+
+script: |
+
+ sudo apt update
+
+ sudo apt install nginx -y
+
+ sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/
+
+ sudo chmod -R 755 /var/www/html/
+
+- name: Copy code to EC2
+
+uses: appleboy/scp-action@v0.1.4
+
+with:
+
+host: ${{ secrets.EC2_HOSTNAME }}
+
+username: ${{ secrets.EC2_USERNAME }}
+
+key: ${{ secrets.EC2_SSHKEY }}
+
+port: 22
+
+source: ./
+
+target: /var/www/html/
