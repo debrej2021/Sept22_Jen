@@ -32,11 +32,11 @@ uses: appleboy/ssh-action@v1.0.0
 
 with:
 
-host: ${{ secrets.EC2_HOSTNAME }}
+host: ${{ secrets.EC2_HOST_NAME }}
 
-username: ${{ secrets.EC2_USERNAME }}
+username: ${{ secrets.EC2_USER_NAME }}
 
-key: ${{ secrets.EC2_SSHKEY }}
+key: ${{ secrets.EC2_SSH_KEY }}
 
 port: 22
 
@@ -46,7 +46,7 @@ script: |
 
  sudo apt install nginx -y
 
- sudo chown -R ${{ secrets.EC2_USERNAME }} /var/www/html/
+ sudo chown -R ${{ secrets.EC2_USER_NAME }} /var/www/html/
 
  sudo chmod -R 755 /var/www/html/
 
@@ -56,11 +56,11 @@ uses: appleboy/scp-action@v0.1.4
 
 with:
 
-host: ${{ secrets.EC2_HOSTNAME }}
+host: ${{ secrets.EC2_HOST_NAME }}
 
-username: ${{ secrets.EC2_USERNAME }}
+username: ${{ secrets.EC2_USER_NAME }}
 
-key: ${{ secrets.EC2_SSHKEY }}
+key: ${{ secrets.EC2_SSH_KEY }}
 
 port: 22
 
